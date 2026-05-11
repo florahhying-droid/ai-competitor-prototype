@@ -175,34 +175,6 @@
       box-shadow: 0 2px 6px rgba(31, 42, 58, .04);
     }
 
-    .product-head {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      padding: 14px;
-      min-height: 126px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .product-summary {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(160px, 1fr));
-      gap: 12px 18px;
-      align-content: start;
-    }
-
-    .summary-item {
-      display: grid;
-      grid-template-columns: 112px 1fr;
-      align-items: center;
-      color: #697589;
-    }
-
-    .summary-item b {
-      color: #263142;
-      font-weight: 500;
-    }
-
     .product-media { display: flex; gap: 12px; }
 
     .main-photo {
@@ -935,30 +907,17 @@
 
     <main class="canvas">
       <section id="detailView" class="page-card view">
-        <div class="product-head">
-          <div class="product-summary">
-            <div class="summary-item"><span>产品名称：</span><b>透明收纳袋套装</b></div>
-            <div class="summary-item"><span>SPU：</span><b>PTH_338BY9AX</b></div>
-            <div class="summary-item"><span>产品状态：</span><b>开发中</b></div>
-            <div class="summary-item"><span>立项运营：</span><b>许叶青</b></div>
-          </div>
-          <div class="kv">
-            <span>适用年龄：</span><b>无 <span class="ok">□</span></b>
-            <span>SPU立项运营：</span><b>无</b>
-            <span>AI推荐状态：</span><b><a class="ai-shortcut" data-jump="competitor"><span class="icon-ai"></span>AI已推荐 6 条竞品 →</a></b>
-          </div>
-        </div>
         <div class="tabs" id="detailTabs">
           <button class="tab">采购信息</button>
           <button class="tab">产品规格</button>
-          <button class="tab" data-detail-tab="sales">销售信息</button>
+          <button class="tab active" data-detail-tab="sales">销售信息</button>
           <button class="tab">产品描述</button>
           <button class="tab">产品知识库</button>
-          <button class="tab active" data-detail-tab="competitor">竞品信息</button>
+          <button class="tab" data-detail-tab="competitor">竞品信息</button>
           <button class="tab">库存及成本</button>
           <button class="tab">关联Listing</button>
         </div>
-        <div class="tab-panel" id="detailSalesPanel" hidden>
+        <div class="tab-panel" id="detailSalesPanel">
           <div class="sales-preview">
             <div class="sales-preview-left">开发填写区域（略）</div>
             <div class="sales-preview-right">
@@ -974,7 +933,7 @@
             </div>
           </div>
         </div>
-        <div class="content-pad tab-panel" id="competitorArea">
+        <div class="content-pad tab-panel" id="competitorArea" hidden>
           <div class="toolbar">
             <div class="toolbar-left">
               <button class="btn primary">添加竞品链接</button>
@@ -1364,6 +1323,7 @@
       qs('#contextBehavior').textContent = contexts[view][1];
       qs('#pageCrumb').textContent = view === 'detail' ? '竞品信息' : view === 'states' ? '弹窗状态' : '销售信息';
       qs('#entrySourceBox').style.display = view === 'sales' ? '' : 'none';
+      if (view === 'detail') setDetailTab('sales');
     }
 
     function setDetailTab(tabName) {
