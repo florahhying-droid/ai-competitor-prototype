@@ -331,18 +331,16 @@
       font-weight: 500;
     }
 
-    .sales-competitor-entry {
-      min-height: 34px;
-      display: flex;
+    .competitor-field-link {
+      display: inline-flex;
       align-items: center;
-      width: 100%;
-    }
-
-    .sales-entry-help {
-      color: #9aa3b1;
-      line-height: 1.5;
-      font-size: 12px;
+      gap: 6px;
+      color: var(--teal-dark);
       font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     .toolbar {
@@ -569,6 +567,8 @@
     }
 
     .operation-box .field { padding: 12px; }
+
+    .complete-competitor { padding: 0 12px 14px; }
 
     .sticky-actions {
       position: fixed;
@@ -968,12 +968,9 @@
                 <input value="wireless headphones noise cancelling" readonly>
               </div>
               <div class="sales-field-row">
-                <label>竞品</label>
-                <div class="sales-competitor-entry">
-                  <a class="ai-shortcut" data-jump="competitor"><span class="icon-ai"></span>AI已推荐 6 条竞品 →</a>
-                </div>
+                <label>竞品信息</label>
+                <a class="competitor-field-link" data-jump="competitor"><span class="icon-ai"></span>AI 已推荐 6 条竞品，去查看 &gt;</a>
               </div>
-              <div class="sales-entry-help">点击跳转竞品信息Tab · 无结果时自动隐藏</div>
             </div>
           </div>
         </div>
@@ -1009,7 +1006,7 @@
               <tr>
                 <td class="ellipsis"><a class="link">https://www.amazon.com/dp/B09J7TL1X1</a></td>
                 <td><a class="link" target="_blank" href="https://www.amazon.com/dp/B09J7TL1X1">B09J7TL1X1</a></td>
-                <td>市场同款</td>
+                <td>同款</td>
                 <td>-</td>
                 <td></td>
                 <td>Flora</td>
@@ -1066,7 +1063,7 @@
                   <td>竞品1</td>
                   <td><input value="https://www.amazon.com/dp/B0DCJWGR7D?t" style="width:100%;border:1px solid var(--line);height:28px;padding:0 8px"></td>
                   <td><input value="B0DCJWGR7D" style="width:100%;border:1px solid var(--line);height:28px;padding:0 8px"></td>
-                  <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>市场同款</option></select></td>
+                  <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>同款</option><option>相似款</option></select></td>
                   <td>-</td>
                   <td><a class="disabled-link">删除</a></td>
                 </tr>
@@ -1096,6 +1093,12 @@
               <div class="field">
                 <label><span class="req">*</span>关键词（英文）</label>
                 <textarea placeholder="请输入英文关键词，不允许输入中文"></textarea>
+              </div>
+              <div class="complete-competitor">
+                <div class="field" style="padding:0">
+                  <label>竞品信息</label>
+                  <a class="competitor-field-link" data-focus-competitor><span class="icon-ai"></span>AI 已推荐 6 条竞品，去查看 &gt;</a>
+                </div>
               </div>
             </div>
           </aside>
@@ -1245,7 +1248,7 @@
               <td>竞品1</td>
               <td><input data-field="link" style="width:100%;height:28px;border:1px solid var(--line);padding:0 8px"></td>
               <td><input data-field="asin" style="width:100%;height:28px;border:1px solid var(--line);padding:0 8px"></td>
-              <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>竞品类型</option></select></td>
+              <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>同款</option><option>相似款</option></select></td>
               <td data-field="reason">-</td>
               <td><a class="disabled-link">删除</a></td>
             </tr>
@@ -1484,7 +1487,7 @@
           tr.innerHTML = `
             <td class="ellipsis"><a class="link">${itemLink(item)}</a></td>
             <td><a class="link" target="_blank" href="${itemLink(item)}">${item.asin}</a></td>
-            <td>AI判定相似</td>
+            <td>相似款</td>
             <td>${item.reason}</td>
             <td>${thumbMarkup(item)}</td>
             <td>Flora（AI推荐）</td>
@@ -1505,7 +1508,7 @@
             <td>竞品${baseIndex + offset + 1}</td>
             <td><input readonly value="${itemLink(item)}" style="width:100%;border:1px solid var(--line);height:28px;padding:0 8px;background:#f7f8fb"></td>
             <td><input readonly value="${item.asin}" style="width:100%;border:1px solid var(--line);height:28px;padding:0 8px;background:#f7f8fb"></td>
-            <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>AI判定相似</option><option>市场同款</option><option>市场同类</option></select></td>
+            <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>相似款</option><option>同款</option></select></td>
             <td>${item.reason}</td>
             <td><a class="link">删除</a></td>
           `;
@@ -1567,7 +1570,7 @@
         emptyRow.removeAttribute('data-empty');
         emptyRow.querySelector('[data-field="link"]').outerHTML = `<input readonly value="${itemLink(item)}" style="width:100%;height:28px;border:1px solid var(--line);padding:0 8px;background:#f7f8fb">`;
         emptyRow.querySelector('[data-field="asin"]').outerHTML = `<input readonly value="${item.asin}" style="width:100%;height:28px;border:1px solid var(--line);padding:0 8px;background:#f7f8fb">`;
-        emptyRow.querySelector('select').innerHTML = '<option>AI判定相似</option><option>市场同款</option><option>市场同类</option>';
+        emptyRow.querySelector('select').innerHTML = '<option>相似款</option><option>同款</option>';
         emptyRow.querySelector('[data-field="reason"]').textContent = item.reason;
         batchAddedItems.push(item);
         return;
@@ -1577,7 +1580,7 @@
         <td>竞品${tbody.children.length + 1}</td>
         <td><input readonly value="${itemLink(item)}" style="width:100%;height:28px;border:1px solid var(--line);padding:0 8px;background:#f7f8fb"></td>
         <td><input readonly value="${item.asin}" style="width:100%;height:28px;border:1px solid var(--line);padding:0 8px;background:#f7f8fb"></td>
-        <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>AI判定相似</option><option>市场同款</option><option>市场同类</option></select></td>
+        <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>相似款</option><option>同款</option></select></td>
         <td>${item.reason}</td>
         <td><a class="link">删除</a></td>
       `;
@@ -1591,7 +1594,7 @@
         <td>竞品${tbody.children.length + 1}</td>
         <td><input readonly value="${itemLink(item)}" style="width:100%;border:1px solid var(--line);height:28px;padding:0 8px;background:#f7f8fb"></td>
         <td><input readonly value="${item.asin}" style="width:100%;border:1px solid var(--line);height:28px;padding:0 8px;background:#f7f8fb"></td>
-        <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>AI判定相似</option><option>市场同款</option><option>市场同类</option></select></td>
+        <td><select style="width:100%;height:28px;border:1px solid var(--line)"><option>相似款</option><option>同款</option></select></td>
         <td>${item.reason}</td>
         <td><a class="link">删除</a></td>
       `;
@@ -1638,6 +1641,10 @@
     qsa('[data-detail-tab]').forEach(tab => tab.addEventListener('click', () => setDetailTab(tab.dataset.detailTab)));
     qsa('.open-ai').forEach(btn => btn.addEventListener('click', () => openModal(btn.dataset.source)));
     qsa('.open-batch').forEach(btn => btn.addEventListener('click', openBatchModal));
+    qsa('[data-focus-competitor]').forEach(link => link.addEventListener('click', () => {
+      qs('#editRows').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('已定位到竞品信息');
+    }));
     qsa('[data-state-open]').forEach(btn => btn.addEventListener('click', () => openModal('states', btn.dataset.stateOpen)));
 
     qs('#closeModal').addEventListener('click', closeModal);
