@@ -688,10 +688,6 @@
       font-weight: 700;
     }
 
-    .drop-row.separated {
-      border-top: 1px solid #dfe5ec;
-    }
-
     .modal-mask {
       position: fixed;
       inset: 0;
@@ -962,7 +958,7 @@
         <ul>
           <li>右上角「新增配件」进入新增配件页；「编辑配件」进入编辑配件页，编辑态自动带出当前配件的 SPU 标题、配件名称、尺寸重量、外箱包装和已关联主 SKU。</li>
           <li>新增/编辑配件页的外箱包装默认联动产品单套包装：装箱数量默认 1，外箱长宽高跟随单套长宽高，外箱重量按装箱数量 × 单套重量计算；手动修改某个外箱字段后，该字段不再自动覆盖。</li>
-          <li>「关联主SKU」弹窗中，配件 SKU 和关联主 SKU 都支持输入 SPU 或 SKU；输入 SKU 时仅排序置顶，不自动勾选，必须手动勾选或全选才进入输入框。</li>
+          <li>「关联主SKU」弹窗中，配件 SKU 和关联主 SKU 输入 SPU 后带出该 SPU 下所有 SKU；输入单个 SKU 仅展示该 SKU；必须手动勾选或全选才进入输入框。</li>
           <li>SKU 多选下拉关闭后只展示已选项，第一个 SKU 以 tag 展示，超过 1 个显示 +N；点击 tag 上的 x 可移除。</li>
         </ul>
       </section>
@@ -1167,7 +1163,7 @@
           <li>顶部「添加配件」打开添加配件弹窗，弹窗提供「关联新配件」和「关联已有配件」两个入口。</li>
           <li>选择「创建配件产品」后打开新增配件弹窗；弹窗内补齐外箱包装字段，字段名称以可编辑输入框形式支持批量设置。</li>
           <li>新增配件弹窗的外箱包装联动逻辑与新增/编辑配件页一致：装箱数量默认 1，外箱长宽高跟随单个包装尺寸，外箱重量按装箱数量 × 单个重量计算；手动修改后保留用户值。</li>
-          <li>「关联已有配件」下拉复用 SKU/SPU 多选逻辑：支持配件 SPU 或配件 SKU 带出同 SPU 下所有配件 SKU，勾选后才进入输入框，支持全选和 +N 折叠展示。</li>
+          <li>「关联已有配件」下拉复用多选逻辑：输入配件 SPU 后带出该 SPU 下所有配件 SKU；输入单个配件 SKU 仅展示该 SKU；勾选后才进入输入框，支持全选和 +N 折叠展示。</li>
         </ul>
       </section>
     </section>
@@ -1454,14 +1450,7 @@
       if (!key) return [];
       const validPrefix = mode === "main" ? /^(PLS_)/ : /^(PPJ_)/;
       if (!validPrefix.test(key)) return [];
-      const hit = rows.find(row => row.sku.toUpperCase() === key || row.spu.toUpperCase() === key);
-      if (!hit) return [];
-      return [hit, ...rows.filter(row => row.sku !== hit.sku)];
-    }
-
-    function isSkuKeyword(mode, keyword) {
-      const key = keyword.trim().toUpperCase();
-      return data[mode].some(row => row.sku.toUpperCase() === key);
+      return rows.filter(row => row.spu.toUpperCase() === key || row.sku.toUpperCase() === key);
     }
 
     function updateSelectorOpen(selector) {
@@ -1511,16 +1500,27 @@
         return;
       }
 
+      const isSingleSkuSearch = rows.length === 1 && rows[0].sku.toUpperCase() === keyword.toUpperCase();
+      if (isSingleSkuSearch) {
+        dropdown.classList.add("selected-only");
+        dropdown.innerHTML = `
+          <div class="drop-row ${selected.has(rows[0].sku) ? "checked" : ""}" data-sku="${rows[0].sku}">
+            <span>${rows[0].sku}</span><span class="row-tick">✓</span>
+          </div>
+        `;
+        return;
+      }
+
+      dropdown.classList.remove("selected-only");
       const allChecked = rows.every(row => selected.has(row.sku));
       const selectedCount = rows.filter(row => selected.has(row.sku)).length;
       const spu = rows[0].spu;
-      const shouldSeparate = isSkuKeyword(selector.dataset.mode, keyword);
       dropdown.innerHTML = `
         <div class="drop-row all ${allChecked ? "checked" : ""}" data-all="true">
           <span class="check">✓</span><span>全选该SPU下所有SKU</span><span class="spu-summary">${spu} · 共${rows.length}个SKU</span>
         </div>
         ${rows.map((row, index) => `
-          <div class="drop-row ${selected.has(row.sku) ? "checked" : ""} ${shouldSeparate && index === 1 ? "separated" : ""}" data-sku="${row.sku}">
+          <div class="drop-row ${selected.has(row.sku) ? "checked" : ""}" data-sku="${row.sku}">
             <span class="check">✓</span><span>${row.sku}</span><span class="row-tick">✓</span>
           </div>
         `).join("")}
