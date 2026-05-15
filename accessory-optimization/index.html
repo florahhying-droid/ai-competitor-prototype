@@ -1,0 +1,1626 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>配件产品功能优化交互稿</title>
+  <style>
+    :root {
+      --teal: #18b8ad;
+      --teal-dark: #07988e;
+      --teal-soft: #e6fbf8;
+      --line: #dfe5ec;
+      --line-soft: #edf1f5;
+      --bg: #eef2f5;
+      --panel: #fff;
+      --ink: #243040;
+      --muted: #6b7788;
+      --weak: #9aa6b2;
+      --red: #f04438;
+      --orange: #f59e0b;
+      --shadow: 0 2px 8px rgba(16, 24, 40, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1360px;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+
+    button, input, select { font: inherit; }
+
+    .app-tab {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .open-tab {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 9px;
+      color: #6b7788;
+      background: #f3f5f7;
+      border: 1px solid #d9e0e8;
+      border-radius: 2px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .open-tab.active {
+      color: #fff;
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .topbar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    body.form-mode .topbar {
+      display: none;
+    }
+
+    .crumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--teal-dark);
+    }
+
+    .top-actions,
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      height: 30px;
+      min-width: 66px;
+      padding: 0 13px;
+      color: #fff;
+      background: var(--teal);
+      border: 1px solid var(--teal);
+      border-radius: 3px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn:hover { background: var(--teal-dark); }
+
+    .btn.secondary {
+      color: #475467;
+      background: #fff;
+      border-color: #cfd6df;
+    }
+
+    .btn.warn {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    .page { padding: 10px; }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .card {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .product-head {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: linear-gradient(90deg, var(--teal-soft), #f8fffe 70%);
+      border-left: 4px solid var(--teal);
+    }
+
+    .sku-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .sku-title .name {
+      color: var(--teal-dark);
+      font-weight: 500;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 7px;
+      color: var(--teal-dark);
+      background: var(--teal-soft);
+      border: 1px solid #bceee8;
+      border-radius: 3px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tag.orange {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 260px 370px 1fr 1fr;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 204px 64px;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .main-photo {
+      width: 204px;
+      height: 204px;
+      border: 1px solid var(--line-soft);
+      background: #fbfbfb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hat {
+      position: absolute;
+      left: 28px;
+      top: 52px;
+      width: 152px;
+      height: 72px;
+      background: #c4b59c;
+      border: 2px solid #a79579;
+      border-radius: 55% 55% 45% 45%;
+      transform: rotate(5deg);
+      box-shadow: inset 0 8px 18px rgba(255,255,255,.28);
+    }
+
+    .hat:before {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: 43px;
+      width: 190px;
+      height: 30px;
+      background: #d5c6ac;
+      border: 2px solid #a79579;
+      border-radius: 50%;
+    }
+
+    .hat:after {
+      content: "";
+      position: absolute;
+      right: 5px;
+      top: 68px;
+      width: 45px;
+      height: 62px;
+      border-right: 3px solid #6f654f;
+      border-bottom: 3px solid #6f654f;
+      border-radius: 50%;
+      transform: rotate(35deg);
+    }
+
+    .thumbs {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .thumb {
+      width: 58px;
+      height: 58px;
+      border: 2px solid var(--teal);
+      border-radius: 3px;
+      background: #fbfbfb;
+      position: relative;
+    }
+
+    .thumb:before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 19px;
+      width: 40px;
+      height: 20px;
+      background: #c4b59c;
+      border: 1px solid #a79579;
+      border-radius: 50%;
+    }
+
+    .chev { color: #263445; font-size: 18px; }
+
+    .info-box {
+      min-height: 204px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-radius: 4px;
+    }
+
+    .info-box h3 {
+      margin: 0 0 9px;
+      font-size: 13px;
+      color: #253041;
+    }
+
+    .unit {
+      float: right;
+      display: inline-flex;
+      border: 1px solid #cfd6df;
+      border-radius: 2px;
+      overflow: hidden;
+      font-size: 11px;
+    }
+
+    .unit span {
+      padding: 2px 6px;
+      background: #fff;
+    }
+
+    .unit .active {
+      color: #fff;
+      background: var(--teal);
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      min-height: 30px;
+      border-bottom: 1px solid #e4e9ef;
+      align-items: center;
+    }
+
+    .info-row:last-child { border-bottom: 0; }
+
+    .info-row b {
+      color: #667085;
+      font-weight: 500;
+    }
+
+    .line-list {
+      display: grid;
+      gap: 8px;
+      color: #475467;
+    }
+
+    .line-list a { color: var(--teal-dark); text-decoration: none; }
+
+    .accessory-strip {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 42px;
+      position: relative;
+    }
+
+    .strip-arrow {
+      position: absolute;
+      top: 31px;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #b3bdc7;
+    }
+
+    .strip-arrow.left { left: 12px; }
+    .strip-arrow.right { right: 12px; }
+
+    .accessory-card {
+      width: 142px;
+      height: 52px;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 8px;
+      align-items: center;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #fff;
+    }
+
+    .accessory-card.active { border-color: var(--teal); }
+
+    .mini-photo {
+      width: 42px;
+      height: 42px;
+      border: 1px solid #eef1f5;
+      border-radius: 3px;
+      background: #fbfbfb;
+      position: relative;
+    }
+
+    .mini-photo:before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 15px;
+      width: 29px;
+      height: 14px;
+      border-radius: 50%;
+      background: #c4b59c;
+      border: 1px solid #a79579;
+    }
+
+    .accessory-card b {
+      color: var(--teal-dark);
+      font-size: 11px;
+    }
+
+    .accessory-card span {
+      display: block;
+      color: var(--teal-dark);
+      margin-top: 3px;
+    }
+
+    .table-card {
+      padding: 12px;
+    }
+
+    .table-card h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+
+    .interaction-notes {
+      padding: 16px 18px;
+      line-height: 1.8;
+    }
+
+    .interaction-notes h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+
+    .interaction-notes ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #475467;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    th, td {
+      height: 40px;
+      padding: 7px 10px;
+      text-align: left;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    th {
+      color: #667085;
+      background: #f5f7fa;
+      font-weight: 600;
+    }
+
+    .thumb-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .link { color: var(--teal-dark); text-decoration: none; cursor: pointer; }
+
+    .link.disabled {
+      color: #b7c0ca;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .form-head {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .add-form {
+      padding: 16px 12px 360px;
+      background: #fff;
+      min-height: calc(100vh - 34px);
+      overflow: visible;
+    }
+
+    .add-table-scroll {
+      overflow-x: auto;
+      overflow-y: visible;
+      padding-bottom: 18px;
+    }
+
+    .spu-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .required { color: var(--red); margin-right: 4px; }
+
+    .input {
+      height: 28px;
+      padding: 0 8px;
+      border: 1px solid #cfd6df;
+      border-radius: 2px;
+      background: #fff;
+      color: #344054;
+    }
+
+    .input.wide { width: 450px; }
+    .input.short { width: 66px; }
+    .input.mid { width: 110px; }
+
+    .batch-input {
+      width: 76px;
+      height: 24px;
+      text-align: left;
+      color: #344054;
+      background: #fff;
+    }
+
+    .batch-input::placeholder {
+      color: #8a96a3;
+    }
+
+    .add-table {
+      min-width: 1900px;
+    }
+
+    .add-table th,
+    .add-table td {
+      text-align: center;
+      height: 38px;
+    }
+
+    .add-table th.group {
+      background: #f5f7fa;
+      text-align: center;
+    }
+
+    .upload {
+      height: 28px;
+      padding: 0 12px;
+      border: 1px solid var(--teal);
+      background: var(--teal);
+      color: #fff;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    .selector {
+      position: relative;
+      min-width: 220px;
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 2px 6px;
+      border: 1px solid #cfd6df;
+      border-radius: 2px;
+      background: #fff;
+      text-align: left;
+    }
+
+    .selector input {
+      width: 160px;
+      min-width: 120px;
+      height: 22px;
+      border: 0;
+      outline: 0;
+      padding: 0;
+      color: #344054;
+    }
+
+    .select-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 20px;
+      padding: 0 6px;
+      color: #687487;
+      background: #f3f5f7;
+      border: 1px solid #d8dee6;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    .select-tag button {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      color: #98a2b3;
+      background: transparent;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .dropdown {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 4px);
+      width: 500px;
+      display: none;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      box-shadow: 0 6px 18px rgba(16, 24, 40, .12);
+      z-index: 20;
+      text-align: left;
+    }
+
+    .selector.open .dropdown { display: block; }
+
+    .modal .selector.open .dropdown {
+      width: 360px;
+    }
+
+    .drop-row {
+      min-height: 36px;
+      display: grid;
+      grid-template-columns: 22px minmax(112px, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 10px;
+      border-bottom: 1px solid #edf1f5;
+      cursor: pointer;
+    }
+
+    .drop-row:last-child { border-bottom: 0; }
+    .drop-row:hover { background: #f8fbfc; }
+    .drop-row.all {
+      color: #7a8491;
+      background: #f8f9fa;
+      font-weight: 400;
+    }
+
+    .drop-row.all .spu-summary {
+      color: #9aa3ad;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .drop-row.checked:not(.all) {
+      color: var(--teal-dark);
+      background: var(--teal-soft);
+    }
+
+    .check {
+      width: 15px;
+      height: 15px;
+      display: grid;
+      place-items: center;
+      color: transparent;
+      border: 1px solid #b8c1cc;
+      border-radius: 2px;
+      background: #fff;
+      font-size: 11px;
+    }
+
+    .drop-row.checked .check {
+      color: #fff;
+      border-color: var(--teal);
+      background: var(--teal);
+    }
+
+    .row-tick {
+      color: transparent;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    .drop-row.checked .row-tick {
+      color: var(--teal-dark);
+    }
+
+    .empty {
+      padding: 15px;
+      color: #9aa3ad;
+      text-align: center;
+    }
+
+    .selected-count {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      color: var(--teal-dark);
+      background: #fff;
+      border-top: 1px solid #edf1f5;
+      font-weight: 600;
+    }
+
+    .selected-only .drop-row {
+      grid-template-columns: 1fr 18px;
+      color: var(--teal-dark);
+      font-weight: 700;
+    }
+
+    .drop-row.separated {
+      border-top: 1px solid #dfe5ec;
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 56px;
+      background: rgba(0, 0, 0, .56);
+    }
+
+    .modal-mask.open { display: flex; }
+
+    .modal {
+      width: 680px;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 18px 52px rgba(0, 0, 0, .28);
+    }
+
+    .modal.choice {
+      width: 520px;
+    }
+
+    .modal.wide {
+      width: 1060px;
+    }
+
+    .modal-head {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .close {
+      width: 26px;
+      height: 26px;
+      border: 0;
+      background: transparent;
+      color: #98a2b3;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal-body { padding: 0 24px 16px; }
+
+    .choice-block {
+      padding: 4px 0 14px;
+    }
+
+    .choice-block h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+    }
+
+    .choice-line {
+      display: grid;
+      grid-template-columns: 110px 1fr 68px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .choice-line .selector {
+      min-width: 0;
+    }
+
+    .modal-table-wrap {
+      overflow-x: auto;
+      overflow-y: visible;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .new-modal-table {
+      min-width: 1500px;
+    }
+
+    .new-modal-table th,
+    .new-modal-table td {
+      height: 36px;
+      text-align: center;
+      padding: 6px 8px;
+    }
+
+    .new-modal-table th.group {
+      background: #f5f7fa;
+      font-weight: 600;
+    }
+
+    .modal-tip {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      color: #8a96a3;
+      background: #f5f5f5;
+      margin: 0 0 12px;
+      border-radius: 3px;
+    }
+
+    .modal-row {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      align-items: start;
+      min-height: 48px;
+    }
+
+    .modal-row label {
+      padding-top: 7px;
+      font-weight: 600;
+    }
+
+    .modal-foot {
+      height: 52px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      align-items: center;
+      padding: 0 16px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      top: 62px;
+      z-index: 80;
+      min-width: 230px;
+      display: none;
+      padding: 11px 13px;
+      color: #fff;
+      background: #25313f;
+      border-radius: 4px;
+      box-shadow: 0 14px 34px rgba(16, 24, 40, .22);
+    }
+
+    .toast.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="app-tab">
+    <span class="open-tab active" id="accessoryTab">配件产品详情</span>
+    <span class="open-tab" id="nonAccessoryTab">非配件产品详情</span>
+  </div>
+
+  <header class="topbar">
+    <div class="crumb" id="crumb">QG007 &gt; PPJ_33G7 &gt; PPJ_33G7SFLE</div>
+    <div class="top-actions">
+      <span>目标市场:无</span>
+      <button class="btn secondary">更多数据</button>
+      <button class="btn secondary">说明</button>
+      <button class="btn">翻译</button>
+      <button class="btn" id="newAccessoryTop">新增配件</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="view active" id="detailView">
+      <section class="card">
+        <div class="product-head">
+          <div class="sku-title">
+            <span>SKU:PPJ_33G7SFLE</span>
+            <span style="color:#2f80c7;">⟳</span>
+            <span class="name">【不可售】 zn测试配件-开发模板创建11 undefined</span>
+            <span class="tag">一件一箱</span>
+            <span class="tag orange">配件</span>
+          </div>
+          <div class="row-actions">
+            <button class="btn" id="openRelate">关联主SKU</button>
+            <button class="btn" id="editAccessory">编辑配件</button>
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="gallery">
+            <div class="main-photo"><div class="hat"></div></div>
+            <div class="thumbs">
+              <div class="chev">⌃</div>
+              <div class="thumb"></div>
+              <div class="chev" style="margin-top:92px;">⌄</div>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="unit"><span class="active">cm</span><span>inch</span></div>
+            <h3>尺寸信息 <span class="link">图例</span> <span style="font-size:22px; margin-left:8px;">📦</span></h3>
+            <div class="info-row"><b>尺寸</b><span>尺寸:10*10*10 cm</span></div>
+            <div class="info-row"><b>单套</b><span>重量:10 kg/22.05 lb<br>展开尺寸:0*0*0 cm</span></div>
+            <div class="info-row"><b>外箱</b><span>尺寸:10*10*10 cm<br>重量:10 kg/22.05 lb</span></div>
+          </div>
+
+          <div class="info-box">
+            <h3>采购信息及价格</h3>
+            <div class="line-list">
+              <div>采购价 0: 100(¥) 1个起订</div>
+              <div>配件创建时间：2026-05-06 16:05:28</div>
+              <div>默认仓库：东莞仓-直邮小包仓-星瑞达仓</div>
+              <div>产品状态：<a href="#">常规</a></div>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <h3>产品属性信息</h3>
+            <div class="line-list">
+              <div>发货带电属性：不带电池</div>
+              <div>是否液体：非液体</div>
+              <div>是否带磁铁：不带磁铁</div>
+              <div>是否危险品：无</div>
+              <div>电机属性：不带电机</div>
+              <div>配件清单：<a href="#">点击下载</a></div>
+              <div>开票单位：无</div>
+              <div>申报名称：无 / 无</div>
+              <div>海关编码：无</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card accessory-strip">
+        <span class="strip-arrow left">‹</span>
+        <div class="accessory-card active">
+          <div class="mini-photo"></div>
+          <div><b>PPJ_33G7SFLE</b><span>配件1</span></div>
+        </div>
+        <div class="accessory-card">
+          <div class="mini-photo"></div>
+          <div><b style="color:#263445;">PPJ_33G74RQT</b><span style="color:#263445;">配件2</span></div>
+        </div>
+        <span class="strip-arrow right">›</span>
+      </section>
+
+      <section class="card table-card">
+        <h3>关联主SKU</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>主SKU图片</th><th>主SKU</th><th>标题</th><th>重量(kg)</th><th>外箱长(cm)</th><th>外箱宽(cm)</th><th>外箱高(cm)</th><th>带电属性</th><th>带磁属性</th><th>是否危险品</th><th>电机属性</th><th>液体属性</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="thumb-cell"><div class="mini-photo"></div></div></td><td><a class="link">PLS_33TPA5J3</a></td><td>zn测试配件 1.5.6</td><td>10</td><td>10</td><td>10</td><td>10</td><td>不带电池</td><td>否</td><td>非危险</td><td>否</td><td>非液体</td><td><a class="link">解除关联</a></td>
+            </tr>
+            <tr>
+              <td><div class="thumb-cell"><div class="mini-photo"></div></div></td><td><a class="link">PLS_33TPS5K6</a></td><td>zn测试配件 2.5.6</td><td>10</td><td>10</td><td>10</td><td>10</td><td>不带电池</td><td>否</td><td>非危险</td><td>否</td><td>非液体</td><td><a class="link">解除关联</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card interaction-notes">
+        <h3>交互说明</h3>
+        <ul>
+          <li>右上角「新增配件」进入新增配件页；「编辑配件」进入编辑配件页，编辑态自动带出当前配件的 SPU 标题、配件名称、尺寸重量、外箱包装和已关联主 SKU。</li>
+          <li>新增/编辑配件页的外箱包装默认联动产品单套包装：装箱数量默认 1，外箱长宽高跟随单套长宽高，外箱重量按装箱数量 × 单套重量计算；手动修改某个外箱字段后，该字段不再自动覆盖。</li>
+          <li>「关联主SKU」弹窗中，配件 SKU 和关联主 SKU 都支持输入 SPU 或 SKU；输入 SKU 时仅排序置顶，不自动勾选，必须手动勾选或全选才进入输入框。</li>
+          <li>SKU 多选下拉关闭后只展示已选项，第一个 SKU 以 tag 展示，超过 1 个显示 +N；点击 tag 上的 x 可移除。</li>
+        </ul>
+      </section>
+    </section>
+
+    <section class="view" id="addView">
+      <div class="form-head">
+        <div class="crumb" id="formTitle">首页 / 开发管理 / 产品开发 / 新增配件</div>
+        <div class="row-actions">
+          <button class="btn secondary" id="backDetail">返回详情</button>
+          <button class="btn" id="saveAccessory">保存</button>
+        </div>
+      </div>
+
+      <section class="add-form card">
+        <div class="spu-row">
+          <label><span class="required">*</span>SPU标题</label>
+          <input class="input wide" id="spuTitleInput" placeholder="请填写" value="">
+        </div>
+        <button class="btn" style="margin-bottom:12px;">新增</button>
+
+        <div class="add-table-scroll">
+          <table class="add-table">
+            <thead>
+              <tr>
+                <th rowspan="2" style="width:110px;">配件SKU编码</th>
+                <th rowspan="2" style="width:130px;"><span class="required">*</span>配件图片</th>
+                <th rowspan="2" style="width:100px;"><span class="required">*</span>配件名称</th>
+                <th rowspan="2" style="width:96px;"><span class="required">*</span>配件清单</th>
+                <th class="group" colspan="4">产品单套包装</th>
+                <th class="group" colspan="5">外箱包装</th>
+                <th class="group" colspan="3">产品展开尺寸</th>
+                <th rowspan="2" style="width:100px;"><span class="required">*</span><input class="input batch-input" placeholder="价格"></th>
+                <th rowspan="2" style="width:120px;"><span class="required">*</span><input class="input batch-input" placeholder="采购价币种"></th>
+                <th rowspan="2" style="width:120px;"><span class="required">*</span><input class="input batch-input" placeholder="带电属性"></th>
+                <th rowspan="2" style="width:120px;"><span class="required">*</span><input class="input batch-input" placeholder="带磁属性"></th>
+                <th rowspan="2" style="width:120px;"><span class="required">*</span><input class="input batch-input" placeholder="危险品属性"></th>
+                <th rowspan="2" style="width:120px;"><input class="input batch-input" placeholder="电机属性"></th>
+                <th rowspan="2" style="width:120px;"><span class="required">*</span><input class="input batch-input" placeholder="液体属性"></th>
+                <th rowspan="2" style="width:260px;"><span class="required">*</span>关联主SKU ⓘ</th>
+                <th rowspan="2" style="width:80px;">操作</th>
+              </tr>
+              <tr>
+                <th><span class="required">*</span><input class="input batch-input" placeholder="长(cm)"></th>
+                <th><span class="required">*</span><input class="input batch-input" placeholder="宽(cm)"></th>
+                <th><span class="required">*</span><input class="input batch-input" placeholder="高(cm)"></th>
+                <th><span class="required">*</span><input class="input batch-input" placeholder="重量(kg)"></th>
+                <th><input class="input batch-input" placeholder="装箱数量"></th>
+                <th><input class="input batch-input" placeholder="长(cm)"></th>
+                <th><input class="input batch-input" placeholder="宽(cm)"></th>
+                <th><input class="input batch-input" placeholder="高(cm)"></th>
+                <th><input class="input batch-input" placeholder="重量(kg)"></th>
+                <th><input class="input batch-input" placeholder="长(cm)"></th>
+                <th><input class="input batch-input" placeholder="宽(cm)"></th>
+                <th><input class="input batch-input" placeholder="高(cm)"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>系统自动生成无需填写</td>
+                <td><button class="upload">+ 添加</button></td>
+                <td><input class="input mid" data-fill="name"></td>
+                <td><button class="upload">上传文件</button></td>
+                <td><input class="input short single-field" id="singleL" data-target="boxL"></td>
+                <td><input class="input short single-field" id="singleW" data-target="boxW"></td>
+                <td><input class="input short single-field" id="singleH" data-target="boxH"></td>
+                <td><input class="input short" id="singleWeight"></td>
+                <td><input class="input short" id="boxQty" value="1"></td>
+                <td><input class="input short box-field" id="boxL"></td>
+                <td><input class="input short box-field" id="boxW"></td>
+                <td><input class="input short box-field" id="boxH"></td>
+                <td><input class="input short box-field" id="boxWeight"></td>
+                <td><input class="input short" data-fill="expandL"></td>
+                <td><input class="input short" data-fill="expandW"></td>
+                <td><input class="input short" data-fill="expandH"></td>
+                <td><input class="input mid" data-fill="price"></td>
+                <td><select class="input mid"><option>CNY人民币</option></select></td>
+                <td><select class="input mid"><option>不带电池</option></select></td>
+                <td><select class="input mid"><option>否</option></select></td>
+                <td><select class="input mid"><option>非危险</option></select></td>
+                <td><select class="input mid"><option>否</option></select></td>
+                <td><select class="input mid"><option>非液体</option></select></td>
+                <td>
+                  <div class="selector sku-selector" data-mode="main">
+                    <input placeholder="多个以英文逗号/空格隔开">
+                    <div class="dropdown"></div>
+                  </div>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="view" id="nonAccessoryView">
+      <section class="card">
+        <div class="product-head">
+          <div class="sku-title">
+            <span>SKU:PLS_33TPA5J3</span>
+            <span style="color:#2f80c7;">⟳</span>
+            <span class="name">zn测试配件 1.5.6</span>
+            <span class="tag">一件一箱</span>
+            <span class="tag orange">GARVEE包装</span>
+            <span class="tag">中卡</span>
+          </div>
+          <div class="row-actions"></div>
+        </div>
+
+        <div class="detail-grid" style="grid-template-columns:260px 340px 1fr 1fr 1fr;">
+          <div class="gallery">
+            <div class="main-photo"><div class="hat"></div></div>
+            <div class="thumbs">
+              <div class="chev">⌃</div>
+              <div class="thumb"></div>
+              <div class="chev" style="margin-top:92px;">⌄</div>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="unit"><span class="active">cm</span><span>inch</span></div>
+            <h3>尺寸信息 <span class="link">图例</span></h3>
+            <div class="info-row"><b>装箱方式</b><span>一件一箱</span></div>
+            <div class="info-row"><b>尺寸</b><span>尺寸:10*10*10 cm</span></div>
+            <div class="info-row"><b>单套</b><span>重量:10 kg/22.05 lb<br>展开尺寸:10*10*10 cm</span></div>
+            <div class="info-row"><b>外箱</b><span>尺寸:10*10*10 cm<br>重量:10 kg/22.05 lb</span></div>
+          </div>
+
+          <div class="info-box">
+            <h3>基础信息</h3>
+            <div class="line-list">
+              <div>品线：其他-花环</div>
+              <div>品类：工业与科研用品</div>
+              <div>项目编号：<a href="#">B20260416IPML</a></div>
+              <div>当前开发：钟伟青</div>
+              <div>产品标签：<a href="#">GARVEE包装</a></div>
+              <div>可售区域：美国</div>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <h3>采购信息及价格</h3>
+            <div class="line-list">
+              <div>采购价 0：9.7345(¥) 1个起订</div>
+              <div>供应状态：正常</div>
+              <div>采购状态：不可采购</div>
+              <div>产品类型：量产产品</div>
+              <div>sku创建时间：2026/05/06 16:05:59</div>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <h3>产品属性信息</h3>
+            <div class="line-list">
+              <div>SKU属性：color：</div>
+              <div>面料成分/材质：<a href="#">5.6</a></div>
+              <div>季节：无</div>
+              <div>用电属性：否</div>
+              <div>特殊品属性：不带电池,不带磁铁,非危险,非液体</div>
+              <div>开票单位：无</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card accessory-strip">
+        <span class="strip-arrow left">‹</span>
+        <div class="accessory-card active">
+          <div class="mini-photo"></div>
+          <div><b>PLS_33TPA5J3</b><span>1</span></div>
+        </div>
+        <div class="accessory-card">
+          <div class="mini-photo"></div>
+          <div><b style="color:#263445;">PLS_33TPS5K6</b><span style="color:#263445;">2</span></div>
+        </div>
+        <span class="strip-arrow right">›</span>
+      </section>
+
+      <section class="card table-card">
+        <h3>关联配件SKU</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>配件图片</th><th>配件SKU</th><th>标题</th><th>配件数量库存</th><th>重量(kg)</th><th>产品尺寸(cm)</th><th>带电属性</th><th>带磁属性</th><th>是否危险品</th><th>电机属性</th><th>液体属性</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="thumb-cell"><div class="mini-photo"></div></div></td><td><a class="link">PPJ_3B5B56N</a></td><td>【不可售】123</td><td>0</td><td>0.01</td><td>5 / 4 / 3</td><td>不带电池</td><td>否</td><td>爆炸品炸药</td><td>否</td><td>未设置</td><td><a class="link">解除关联</a></td>
+            </tr>
+            <tr>
+              <td><div class="thumb-cell"><div class="mini-photo"></div></div></td><td><a class="link">PPJ_33G7SFLE</a></td><td>【不可售】zn测试配件-开发模板创建11 undefined</td><td>0</td><td>10</td><td>10 / 10 / 10</td><td>不带电池</td><td>否</td><td>非危险</td><td>否</td><td>非液体</td><td><a class="link">解除关联</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card interaction-notes">
+        <h3>交互说明</h3>
+        <ul>
+          <li>顶部「添加配件」打开添加配件弹窗，弹窗提供「关联新配件」和「关联已有配件」两个入口。</li>
+          <li>选择「创建配件产品」后打开新增配件弹窗；弹窗内补齐外箱包装字段，字段名称以可编辑输入框形式支持批量设置。</li>
+          <li>新增配件弹窗的外箱包装联动逻辑与新增/编辑配件页一致：装箱数量默认 1，外箱长宽高跟随单个包装尺寸，外箱重量按装箱数量 × 单个重量计算；手动修改后保留用户值。</li>
+          <li>「关联已有配件」下拉复用 SKU/SPU 多选逻辑：支持配件 SPU 或配件 SKU 带出同 SPU 下所有配件 SKU，勾选后才进入输入框，支持全选和 +N 折叠展示。</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-mask" id="relateModal">
+    <section class="modal">
+      <header class="modal-head">
+        <span>关联主SKU</span>
+        <button class="close" id="closeRelate">×</button>
+      </header>
+      <div class="modal-body">
+        <div class="modal-tip">配件及主SKU均支持多选</div>
+        <div class="modal-row">
+          <label><span class="required">*</span>配件SKU</label>
+          <div class="selector sku-selector" data-mode="accessory">
+            <input placeholder="多个以英文逗号/空格隔开">
+            <div class="dropdown"></div>
+          </div>
+        </div>
+        <div class="modal-row">
+          <label><span class="required">*</span>关联主SKU</label>
+          <div class="selector sku-selector" data-mode="main">
+            <input placeholder="多个以英文逗号/空格隔开">
+            <div class="dropdown"></div>
+          </div>
+        </div>
+      </div>
+      <footer class="modal-foot">
+        <button class="btn secondary" id="cancelRelate">取消</button>
+        <button class="btn" id="confirmRelate">确认关联</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modal-mask" id="addAccessoryModal">
+    <section class="modal choice">
+      <header class="modal-head">
+        <span>添加配件</span>
+        <button class="close" id="closeAddAccessory">×</button>
+      </header>
+      <div class="modal-body">
+        <div class="choice-block">
+          <h3>关联新配件</h3>
+          <div style="padding-left:110px;">
+            <button class="btn" id="openQuickNewAccessory">创建配件产品</button>
+          </div>
+        </div>
+        <div class="choice-block">
+          <h3>关联已有配件</h3>
+          <div class="choice-line">
+            <span>搜索已创建的配件产品</span>
+            <div class="selector sku-selector" data-mode="accessory">
+              <input placeholder="输入配件SKU，多个英文逗号隔开">
+              <div class="dropdown"></div>
+            </div>
+            <button class="btn" id="confirmExistingAccessory">关联</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-mask" id="quickNewAccessoryModal">
+    <section class="modal wide">
+      <header class="modal-head">
+        <span>新增配件</span>
+        <button class="close" id="closeQuickNew">×</button>
+      </header>
+      <div class="modal-body">
+        <div class="modal-row" style="grid-template-columns:120px 1fr;">
+          <label><span class="required">*</span>配件SPU标题</label>
+          <input class="input" placeholder="请输入">
+        </div>
+        <button class="btn" style="margin-bottom:12px;">新增</button>
+        <div class="modal-table-wrap">
+          <table class="new-modal-table">
+            <thead>
+              <tr>
+                <th rowspan="2"><span class="required">*</span>配件图片</th>
+                <th rowspan="2"><span class="required">*</span>配件名称</th>
+                <th rowspan="2"><span class="required">*</span>配件清单</th>
+                <th class="group" colspan="4"><span class="required">*</span>单个包装尺寸</th>
+                <th class="group" colspan="5">外箱包装</th>
+                <th rowspan="2"><span class="required">*</span><input class="input batch-input" placeholder="采购价"></th>
+                <th rowspan="2"><span class="required">*</span><input class="input batch-input" placeholder="采购价币种"></th>
+                <th rowspan="2"><span class="required">*</span><input class="input batch-input" placeholder="发货带电属性"></th>
+                <th rowspan="2"><span class="required">*</span><input class="input batch-input" placeholder="带磁属性"></th>
+                <th rowspan="2"><span class="required">*</span><input class="input batch-input" placeholder="危险品属性"></th>
+                <th rowspan="2"><span class="required">*</span><input class="input batch-input" placeholder="电机属性"></th>
+                <th rowspan="2"><span class="required">*</span><input class="input batch-input" placeholder="液体属性"></th>
+                <th rowspan="2">操作</th>
+              </tr>
+              <tr>
+                <th><input class="input batch-input" placeholder="重量(kg)"></th>
+                <th><input class="input batch-input" placeholder="长(cm)"></th>
+                <th><input class="input batch-input" placeholder="宽(cm)"></th>
+                <th><input class="input batch-input" placeholder="高(cm)"></th>
+                <th><input class="input batch-input" placeholder="装箱数量"></th>
+                <th><input class="input batch-input" placeholder="长(cm)"></th>
+                <th><input class="input batch-input" placeholder="宽(cm)"></th>
+                <th><input class="input batch-input" placeholder="高(cm)"></th>
+                <th><input class="input batch-input" placeholder="重量(kg)"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><button class="upload">+上传图片</button></td>
+                <td><input class="input mid"></td>
+                <td><button class="upload">上传文件</button></td>
+                <td><input class="input short" id="quickSingleWeight"></td>
+                <td><input class="input short quick-single" id="quickSingleL" data-target="quickBoxL"></td>
+                <td><input class="input short quick-single" id="quickSingleW" data-target="quickBoxW"></td>
+                <td><input class="input short quick-single" id="quickSingleH" data-target="quickBoxH"></td>
+                <td><input class="input short" id="quickBoxQty" value="1"></td>
+                <td><input class="input short quick-box" id="quickBoxL"></td>
+                <td><input class="input short quick-box" id="quickBoxW"></td>
+                <td><input class="input short quick-box" id="quickBoxH"></td>
+                <td><input class="input short quick-box" id="quickBoxWeight"></td>
+                <td><input class="input mid"></td>
+                <td><select class="input mid"><option>CNY人民币</option></select></td>
+                <td><select class="input mid"><option>请选择</option><option>不带电池</option></select></td>
+                <td><select class="input mid"><option>请选择</option><option>否</option></select></td>
+                <td><select class="input mid"><option>请选择</option><option>非危险</option></select></td>
+                <td><select class="input mid"><option>请选择</option><option>否</option></select></td>
+                <td><select class="input mid"><option>请选择</option><option>非液体</option></select></td>
+                <td><a class="link disabled">删除</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <footer class="modal-foot">
+        <button class="btn secondary" id="cancelQuickNew">取消</button>
+        <button class="btn" id="saveQuickNew">保存</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+    const data = {
+      accessory: [
+        { spu: "PPJ_33G7", sku: "PPJ_33G7SFLE", name: "zn测试配件-开发模板创建11" },
+        { spu: "PPJ_33G7", sku: "PPJ_33G74RQT", name: "配件2" },
+        { spu: "PPJ_33G7", sku: "PPJ_33G7K9M2", name: "配件3" },
+        { spu: "PPJ_3B5B", sku: "PPJ_3B5B56N", name: "【不可售】123" }
+      ],
+      main: [
+        { spu: "PLS_33TP", sku: "PLS_33TPA5J3", name: "zn测试配件 1.5.6" },
+        { spu: "PLS_33TP", sku: "PLS_33TPS5K6", name: "zn测试配件 2.5.6" },
+        { spu: "PLS_33TP", sku: "PLS_33TPQ2X8", name: "zn测试配件 3.5.6" },
+        { spu: "PLS_33TP", sku: "PLS_33TPR7N1", name: "zn测试配件 4.5.6" }
+      ]
+    };
+
+    const manual = { boxL: false, boxW: false, boxH: false, boxWeight: false };
+    const quickManual = { quickBoxL: false, quickBoxW: false, quickBoxH: false, quickBoxWeight: false };
+    let currentPage = "accessory";
+    const editValues = {
+      spuTitle: "zn测试配件",
+      name: "开发模板创建11",
+      singleL: "10",
+      singleW: "10",
+      singleH: "10",
+      singleWeight: "10",
+      boxQty: "1",
+      boxL: "10",
+      boxW: "10",
+      boxH: "10",
+      boxWeight: "10",
+      expandL: "0",
+      expandW: "0",
+      expandH: "0",
+      price: "100"
+    };
+
+    function setFormMode(mode) {
+      document.body.classList.toggle("form-mode", mode !== "detail");
+      if (mode === "detail") {
+        return;
+      }
+
+      $("#formTitle").textContent = mode === "edit"
+        ? "首页 / 开发管理 / 产品开发 / 编辑配件"
+        : "首页 / 开发管理 / 产品开发 / 新增配件";
+      $("#spuTitleInput").value = mode === "edit" ? editValues.spuTitle : "";
+
+      Object.keys(manual).forEach(key => manual[key] = false);
+      ["singleL", "singleW", "singleH", "singleWeight", "boxL", "boxW", "boxH", "boxWeight", "boxQty"].forEach(id => {
+        $("#" + id).value = mode === "edit" ? editValues[id] : (id === "boxQty" ? "1" : "");
+      });
+      $$("[data-fill]").forEach(input => {
+        input.value = mode === "edit" ? (editValues[input.dataset.fill] || "") : "";
+      });
+      $$(".sku-selector").forEach(selector => {
+        if (selector.closest("#addView")) {
+          selector.dataset.selected = mode === "edit" ? "PLS_33TPA5J3,PLS_33TPS5K6" : "";
+          $("input", selector).value = "";
+          renderSelector(selector);
+        }
+      });
+      syncBox();
+    }
+
+    function show(view, mode = "detail") {
+      $$(".view").forEach(item => item.classList.remove("active"));
+      $(view).classList.add("active");
+      setFormMode(view === "#addView" ? mode : "detail");
+    }
+
+    function showAccessoryDetail() {
+      currentPage = "accessory";
+      document.body.classList.remove("form-mode");
+      $$(".view").forEach(item => item.classList.remove("active"));
+      $("#detailView").classList.add("active");
+      $("#accessoryTab").classList.add("active");
+      $("#nonAccessoryTab").classList.remove("active");
+      $("#crumb").textContent = "QG007 > PPJ_33G7 > PPJ_33G7SFLE";
+      $("#newAccessoryTop").textContent = "新增配件";
+    }
+
+    function showNonAccessoryDetail() {
+      currentPage = "non-accessory";
+      document.body.classList.remove("form-mode");
+      $$(".view").forEach(item => item.classList.remove("active"));
+      $("#nonAccessoryView").classList.add("active");
+      $("#accessoryTab").classList.remove("active");
+      $("#nonAccessoryTab").classList.add("active");
+      $("#crumb").textContent = "QG007 > B20260416IPML > PLS_33TP > PLS_33TPA5J3";
+      $("#newAccessoryTop").textContent = "添加配件";
+    }
+
+    function toast(message) {
+      const node = $("#toast");
+      node.textContent = message;
+      node.classList.add("show");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => node.classList.remove("show"), 2200);
+    }
+
+    function numberOf(id) {
+      const value = Number($("#" + id).value);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function syncBox() {
+      $$(".single-field").forEach(input => {
+        const target = input.dataset.target;
+        if (!manual[target]) $("#" + target).value = input.value;
+      });
+      if (!manual.boxWeight) {
+        const singleWeight = $("#singleWeight").value;
+        $("#boxWeight").value = singleWeight === "" ? "" : (numberOf("boxQty") * numberOf("singleWeight")).toFixed(2).replace(/\\.00$/, "");
+      }
+    }
+
+    function syncQuickBox() {
+      $$(".quick-single").forEach(input => {
+        const target = input.dataset.target;
+        if (!quickManual[target]) $("#" + target).value = input.value;
+      });
+      if (!quickManual.quickBoxWeight) {
+        const singleWeight = $("#quickSingleWeight").value;
+        $("#quickBoxWeight").value = singleWeight === "" ? "" : (Number($("#quickBoxQty").value || 0) * Number(singleWeight || 0)).toFixed(2).replace(/\.00$/, "");
+      }
+    }
+
+    function selectedSet(selector) {
+      return new Set((selector.dataset.selected || "").split(",").filter(Boolean));
+    }
+
+    function saveSelected(selector, selected) {
+      selector.dataset.selected = Array.from(selected).join(",");
+    }
+
+    function matchingRows(mode, keyword, selected) {
+      const rows = data[mode];
+      const key = keyword.trim().toUpperCase();
+      if (!key) return [];
+      const validPrefix = mode === "main" ? /^(PLS_)/ : /^(PPJ_)/;
+      if (!validPrefix.test(key)) return [];
+      const hit = rows.find(row => row.sku.toUpperCase() === key || row.spu.toUpperCase() === key);
+      if (!hit) return [];
+      return [hit, ...rows.filter(row => row.sku !== hit.sku)];
+    }
+
+    function isSkuKeyword(mode, keyword) {
+      const key = keyword.trim().toUpperCase();
+      return data[mode].some(row => row.sku.toUpperCase() === key);
+    }
+
+    function updateSelectorOpen(selector) {
+      const input = $("input", selector);
+      const dropdown = $(".dropdown", selector);
+      selector.classList.toggle("open", Boolean(input.value.trim() && dropdown.innerHTML));
+    }
+
+    function renderSelector(selector) {
+      const input = $("input", selector);
+      const selected = selectedSet(selector);
+      const keyword = input.value.trim();
+      const rows = matchingRows(selector.dataset.mode, input.value, selected);
+      saveSelected(selector, selected);
+
+      $$(".select-tag.generated", selector).forEach(tag => tag.remove());
+      const selectedList = Array.from(selected);
+      selectedList.slice(0, 1).forEach(sku => {
+        const tag = document.createElement("span");
+        tag.className = "select-tag generated";
+        tag.innerHTML = `${sku}<button type="button" aria-label="移除${sku}" data-remove="${sku}">×</button>`;
+        selector.insertBefore(tag, input);
+      });
+      if (selectedList.length > 1) {
+        const more = document.createElement("span");
+        more.className = "select-tag generated";
+        more.textContent = `+ ${selectedList.length - 1}`;
+        selector.insertBefore(more, input);
+      }
+      input.placeholder = selected.size ? "" : "多个以英文逗号/空格隔开";
+
+      const dropdown = $(".dropdown", selector);
+      if (!keyword) {
+        const selectedRows = data[selector.dataset.mode].filter(row => selected.has(row.sku));
+        dropdown.classList.toggle("selected-only", selectedRows.length > 0);
+        dropdown.innerHTML = selectedRows.map(row => `
+          <div class="drop-row checked" data-sku="${row.sku}">
+            <span>${row.sku}</span><span class="row-tick">✓</span>
+          </div>
+        `).join("");
+        if (!selectedRows.length) selector.classList.remove("open");
+        return;
+      }
+      dropdown.classList.remove("selected-only");
+      if (!rows.length) {
+        dropdown.innerHTML = '<div class="empty">无数据</div>';
+        return;
+      }
+
+      const allChecked = rows.every(row => selected.has(row.sku));
+      const selectedCount = rows.filter(row => selected.has(row.sku)).length;
+      const spu = rows[0].spu;
+      const shouldSeparate = isSkuKeyword(selector.dataset.mode, keyword);
+      dropdown.innerHTML = `
+        <div class="drop-row all ${allChecked ? "checked" : ""}" data-all="true">
+          <span class="check">✓</span><span>全选该SPU下所有SKU</span><span class="spu-summary">${spu} · 共${rows.length}个SKU</span>
+        </div>
+        ${rows.map((row, index) => `
+          <div class="drop-row ${selected.has(row.sku) ? "checked" : ""} ${shouldSeparate && index === 1 ? "separated" : ""}" data-sku="${row.sku}">
+            <span class="check">✓</span><span>${row.sku}</span><span class="row-tick">✓</span>
+          </div>
+        `).join("")}
+        <div class="selected-count">已选 ${selectedCount} 个SKU</div>
+      `;
+    }
+
+    $("#accessoryTab").addEventListener("click", showAccessoryDetail);
+    $("#nonAccessoryTab").addEventListener("click", showNonAccessoryDetail);
+    $("#newAccessoryTop").addEventListener("click", () => {
+      if (currentPage === "non-accessory") $("#addAccessoryModal").classList.add("open");
+      else show("#addView", "new");
+    });
+    $("#editAccessory").addEventListener("click", () => show("#addView", "edit"));
+    $("#backDetail").addEventListener("click", () => show("#detailView"));
+    $("#saveAccessory").addEventListener("click", () => toast("保存成功，外箱默认值随保存生效"));
+
+    $("#openRelate").addEventListener("click", () => {
+      const accessorySelector = $('#relateModal .sku-selector[data-mode="accessory"]');
+      accessorySelector.dataset.selected = "PPJ_33G7SFLE";
+      $("input", accessorySelector).value = "";
+      renderSelector(accessorySelector);
+      $("#relateModal").classList.add("open");
+    });
+    $("#closeRelate").addEventListener("click", () => $("#relateModal").classList.remove("open"));
+    $("#cancelRelate").addEventListener("click", () => $("#relateModal").classList.remove("open"));
+    $("#relateModal").addEventListener("click", event => {
+      if (event.target.id === "relateModal") $("#relateModal").classList.remove("open");
+    });
+    $("#confirmRelate").addEventListener("click", () => toast("关联成功"));
+
+    $("#closeAddAccessory").addEventListener("click", () => $("#addAccessoryModal").classList.remove("open"));
+    $("#confirmExistingAccessory").addEventListener("click", () => toast("关联成功"));
+    $("#openQuickNewAccessory").addEventListener("click", () => {
+      $("#addAccessoryModal").classList.remove("open");
+      $("#quickNewAccessoryModal").classList.add("open");
+    });
+    $("#closeQuickNew").addEventListener("click", () => $("#quickNewAccessoryModal").classList.remove("open"));
+    $("#cancelQuickNew").addEventListener("click", () => $("#quickNewAccessoryModal").classList.remove("open"));
+    $("#saveQuickNew").addEventListener("click", () => toast("保存成功，当前产品详情页将刷新关联配件列表"));
+    $("#addAccessoryModal").addEventListener("click", event => {
+      if (event.target.id === "addAccessoryModal") $("#addAccessoryModal").classList.remove("open");
+    });
+    $("#quickNewAccessoryModal").addEventListener("click", event => {
+      if (event.target.id === "quickNewAccessoryModal") $("#quickNewAccessoryModal").classList.remove("open");
+    });
+
+    $$(".single-field, #singleWeight, #boxQty").forEach(input => input.addEventListener("input", syncBox));
+    $$(".box-field").forEach(input => input.addEventListener("input", () => {
+      manual[input.id] = true;
+    }));
+    $$(".quick-single, #quickSingleWeight, #quickBoxQty").forEach(input => input.addEventListener("input", syncQuickBox));
+    $$(".quick-box").forEach(input => input.addEventListener("input", () => {
+      quickManual[input.id] = true;
+    }));
+
+    $$(".sku-selector").forEach(selector => {
+      const input = $("input", selector);
+      renderSelector(selector);
+      input.addEventListener("focus", () => {
+        renderSelector(selector);
+        const hasSelected = selectedSet(selector).size > 0;
+        if (input.value.trim() || hasSelected) selector.classList.add("open");
+      });
+      input.addEventListener("input", () => {
+        renderSelector(selector);
+        updateSelectorOpen(selector);
+      });
+      selector.addEventListener("click", event => {
+        event.stopPropagation();
+        const remove = event.target.closest("[data-remove]");
+        if (remove) {
+          const selected = selectedSet(selector);
+          selected.delete(remove.dataset.remove);
+          saveSelected(selector, selected);
+          input.value = "";
+          renderSelector(selector);
+          selector.classList.remove("open");
+          return;
+        }
+        const row = event.target.closest(".drop-row");
+        if (!row) {
+          input.focus();
+          return;
+        }
+        const selected = selectedSet(selector);
+        const rows = matchingRows(selector.dataset.mode, input.value, new Set(selected));
+        if (row.dataset.all) {
+          const shouldSelect = !row.classList.contains("checked");
+          rows.forEach(item => shouldSelect ? selected.add(item.sku) : selected.delete(item.sku));
+        } else if (row.dataset.sku) {
+          selected.has(row.dataset.sku) ? selected.delete(row.dataset.sku) : selected.add(row.dataset.sku);
+        }
+        saveSelected(selector, selected);
+        renderSelector(selector);
+        selector.classList.add("open");
+      });
+    });
+
+    document.addEventListener("click", event => {
+      $$(".sku-selector").forEach(selector => {
+        if (!event.composedPath().includes(selector)) {
+          $("input", selector).value = "";
+          renderSelector(selector);
+          selector.classList.remove("open");
+        }
+      });
+    });
+
+    syncBox();
+    syncQuickBox();
+  </script>
+</body>
+</html>

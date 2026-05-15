@@ -6,6 +6,7 @@
 
 - `competitor-ai/`：AI 推荐竞品链接功能
 - `accessory-log/`：配件产品尺寸重量日志
+- `accessory-optimization/`：配件产品添加与关联优化
 
 ## 新增一个需求原型
 
@@ -24,5 +25,7 @@ product-prototypes/
 ├── accessory-log/
 │   ├── index.html
 │   └── assets/
+├── accessory-optimization/
+│   └── index.html
 └── README.md
 ```
